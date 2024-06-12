@@ -11,14 +11,31 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     private var tableView = UITableView()
     private let inputContainerView = UIView()
-    private let textField = UITextField()
-    private let sendButton = UIButton(type: .system)
     
-    private var messages = [ChatMessage(sender: "Me", prompt: "mvmvmvmvm", isIncoming: false, timestamp: Data()),
-                            ChatMessage(sender: "Ollama", prompt: "mvmvmvmvmqweeeeee", isIncoming: true, timestamp: Data())]
+    private var messages: [ChatMessage] = []
     private let promptService: PromptService
-
-    private var inputContainerViewBottomConstraint: NSLayoutConstraint!
+    
+    private let textField: UITextField = {
+        let field = UITextField()
+        field.placeholder = "Message"
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: field.frame.height))
+        field.leftView = paddingView
+        field.leftViewMode = .always
+        field.layer.borderColor = UIColor.lightGray.cgColor
+        field.layer.cornerRadius = 12
+        field.layer.borderWidth = 1
+        return field
+    }()
+    
+    private let sendButton: UIButton = {
+        let button = UIButton()
+       
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .medium)
+        let largeIcon = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: config)
+        button.setImage(largeIcon, for: .normal)
+        button.tintColor = .blue
+        return button
+    }()
     
     init(promptService: PromptService) {
         self.promptService = promptService
@@ -33,9 +50,7 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupUI()
-        sendPrompt()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillShowNotification, object: nil)
+        sendButton.addTarget( self, action: #selector(sendButtonTapped), for: .touchUpInside)
     }
     
     
@@ -51,26 +66,23 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.heightAnchor.constraint(equalToConstant: 300),
         ])
         
 //         InputContainerView constraints
         view.addSubview(inputContainerView)
         inputContainerView.translatesAutoresizingMaskIntoConstraints = false
-        inputContainerView.backgroundColor = .red
-        inputContainerViewBottomConstraint = inputContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -6)
         NSLayoutConstraint.activate([
             inputContainerView.heightAnchor.constraint(equalToConstant: 50),
-            inputContainerView.topAnchor.constraint(equalTo: tableView.bottomAnchor),
             inputContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             inputContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            inputContainerViewBottomConstraint
+            inputContainerView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -10)
         ])
 //        
 //        // InputTextField constraints
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         inputContainerView.addSubview(textField)
-        textField.backgroundColor = .yellow
         NSLayoutConstraint.activate([
             textField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor, constant: 8),
             textField.centerYAnchor.constraint(equalTo: inputContainerView.centerYAnchor),
@@ -80,18 +92,23 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
 //        // SendButton constraints
         sendButton.translatesAutoresizingMaskIntoConstraints = false
         inputContainerView.addSubview(sendButton)
-        sendButton.backgroundColor = .green
         NSLayoutConstraint.activate([
-            sendButton.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor, constant: -8),
-            sendButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 8),
+            sendButton.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor, constant: -4),
+            sendButton.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 4),
             sendButton.centerYAnchor.constraint(equalTo: inputContainerView.centerYAnchor),
-            sendButton.heightAnchor.constraint(equalToConstant: 30),
+            sendButton.heightAnchor.constraint(equalToConstant: 50),
             sendButton.widthAnchor.constraint(equalToConstant: 50)
         ])
     }
     
-    private func sendPrompt() {
-        promptService.sendPrompt(text: textField.text ?? "") { [weak self] result in
+    @objc func sendButtonTapped() {
+        sendRequest(prompt: textField.text ?? "")
+        let prompt = ChatMessage(sender: "user", prompt: textField.text ?? "nill", isIncoming: true, timestamp: Data())
+        messages.append(prompt)
+    }
+    
+    private func sendRequest(prompt: String) {
+        promptService.sendPrompt(text: prompt) { [weak self] result in
             switch result {
             case.success(let answer):
                 DispatchQueue.main.async {
@@ -111,6 +128,7 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         let cell  = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         let model = messages[indexPath.row]
         cell.configure(with: model)
+        tableView.reloadData()
         return cell
     }
     
@@ -122,33 +140,17 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         print("user ended editing")
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            let keyboardHeight = keyboardSize.height
-            inputContainerViewBottomConstraint.constant = -keyboardHeight
-            UIView.animate(withDuration: 0.3) {
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
-        inputContainerViewBottomConstraint.constant = -6
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentText = textField.text ?? ""
-        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        return true
-    }
-    
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//
+//        return true
+//    }
+//    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
     
     deinit {
           NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
