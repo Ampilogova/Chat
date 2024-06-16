@@ -11,12 +11,13 @@
 
 import UIKit
 
-class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+class ChatTableViewController: UIViewController, UITextFieldDelegate {
     
     private var tableView = UITableView()
     private let inputContainerView = UIView()
-    
+
     private var messages: [ChatMessage] = []
+    private var dataSource: UITableViewDiffableDataSource<String, ChatMessage>!
     private let promptService: PromptService
     
     private let textField: UITextField = {
@@ -54,8 +55,22 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         view.backgroundColor = .systemBackground
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         setupUI()
+        
+        dataSource = UITableViewDiffableDataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell  = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
+            cell.configure(with: item)
+            return cell
+        }
+        var snapshot = dataSource.snapshot()
+        snapshot.appendSections(["main"])
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    func addMessage(_ message: ChatMessage) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems([message])
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
     
     func setupUI() {
         // InputContainerView constraints
@@ -70,8 +85,8 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         
         // TableView constraints
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.dataSource = self
-        tableView.delegate = self
+//        tableView.dataSource = self
+//        tableView.delegate = self
         tableView.register(ChatCell.self, forCellReuseIdentifier: "ChatCell")
         view.addSubview(tableView)
         tableView.separatorStyle = .none
@@ -83,9 +98,6 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
 //            tableView.heightAnchor.constraint(equalToConstant: 600),
         ])
         
-
-
-//        
 //        // InputTextField constraints
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
@@ -110,9 +122,8 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     @objc func sendButtonTapped() {
         sendRequest(prompt: textField.text ?? "")
-        messages.append(ChatMessage(isIncoming: false, response: textField.text ?? ""))
+        addMessage(ChatMessage(isIncoming: false, response: textField.text ?? ""))
         textField.text = ""
-        tableView.reloadData()
     }
     
     private func sendRequest(prompt: String) {
@@ -120,26 +131,14 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
             switch result {
             case.success(let answer):
                 DispatchQueue.main.async {
-                    self?.messages.append(answer)
-                    self?.tableView.reloadData()
+                    self?.addMessage(answer)
                 }
             case .failure(let error):
                 print(error)
             }
         }
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell  = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
-        let model = messages[indexPath.row]
-        cell.configure(with: model)
-        return cell
-    }
-    
+
     func textFieldDidBeginEditing(_ textField: UITextField) {
         print("user started editing")
     }
@@ -148,12 +147,6 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         print("user ended editing")
     }
     
-    
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//
-//        return true
-//    }
-//    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

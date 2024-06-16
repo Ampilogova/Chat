@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct ChatMessage: Codable {
+struct ChatMessage: Codable, Hashable {
     let isIncoming: Bool
     let response: String
+    var id = UUID()
 }
