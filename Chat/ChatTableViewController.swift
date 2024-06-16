@@ -120,8 +120,7 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
             switch result {
             case.success(let answer):
                 DispatchQueue.main.async {
-                    let model = ChatMessage(isIncoming: true, response: answer)
-                    self?.messages.append(model)
+                    self?.messages.append(answer)
                     self?.tableView.reloadData()
                 }
             case .failure(let error):
