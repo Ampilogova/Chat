@@ -13,7 +13,7 @@ class ChatCell: UITableViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
         return view
     }()
@@ -25,36 +25,27 @@ class ChatCell: UITableViewCell {
         return label
     }()
     
-    var bubbleWidthAnchor: NSLayoutConstraint!
     var bubbleLeftAnchor: NSLayoutConstraint!
     var bubbleRightAnchor: NSLayoutConstraint!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.addSubview(bubbleBackgroundView)
-        contentView.addSubview(messageLabel)
+        addSubview(bubbleBackgroundView)
+        addSubview(messageLabel)
         
-        // Message Label Constraints
-        NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 250)
-        ])
+        // Set up constraints for the messageLabel
+        messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16).isActive = true
+        messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 250).isActive = true
         
-        // Bubble Background View Constraints
-        NSLayoutConstraint.activate([
-            bubbleBackgroundView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -8),
-            bubbleBackgroundView.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor, constant: -8),
-            bubbleBackgroundView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
-            bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: 8)
-        ])
+        // Set up constraints for the bubbleBackgroundView
+        bubbleBackgroundView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -8).isActive = true
+        bubbleBackgroundView.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor, constant: -8).isActive = true
+        bubbleBackgroundView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8).isActive = true
+        bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: 8).isActive = true
         
-        // Dynamic width constraint
-        bubbleWidthAnchor = bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 250)
-        bubbleWidthAnchor.isActive = true
-        
-        // Dynamic leading/trailing constraints
+        // Set up dynamic left and right anchors
         bubbleLeftAnchor = bubbleBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
         bubbleRightAnchor = bubbleBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
     }
@@ -65,16 +56,18 @@ class ChatCell: UITableViewCell {
     
     
     func configure(with message: ChatMessage) {
-        messageLabel.text = message.prompt
-        
+        messageLabel.text = message.response
         if message.isIncoming {
             bubbleBackgroundView.backgroundColor = .systemGray5
+            messageLabel.textColor = .black
             bubbleLeftAnchor.isActive = true
             bubbleRightAnchor.isActive = false
         } else {
             bubbleBackgroundView.backgroundColor = .systemBlue
+            messageLabel.textColor = .white
             bubbleLeftAnchor.isActive = false
             bubbleRightAnchor.isActive = true
         }
+        
     }
 }

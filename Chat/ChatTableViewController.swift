@@ -5,6 +5,10 @@
 //  Created by Tatiana Ampilogova on 6/4/24.
 //
 
+
+
+// UIVisualAffectView
+
 import UIKit
 
 class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -29,7 +33,6 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     private let sendButton: UIButton = {
         let button = UIButton()
-       
         let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .medium)
         let largeIcon = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: config)
         button.setImage(largeIcon, for: .normal)
@@ -49,12 +52,22 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         setupUI()
-        sendButton.addTarget( self, action: #selector(sendButtonTapped), for: .touchUpInside)
     }
     
     
     func setupUI() {
+        // InputContainerView constraints
+        view.addSubview(inputContainerView)
+        inputContainerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            inputContainerView.heightAnchor.constraint(equalToConstant: 50),
+            inputContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            inputContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            inputContainerView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
+        ])
+        
         // TableView constraints
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
@@ -66,18 +79,12 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.heightAnchor.constraint(equalToConstant: 300),
+            tableView.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor)
+//            tableView.heightAnchor.constraint(equalToConstant: 600),
         ])
         
-//         InputContainerView constraints
-        view.addSubview(inputContainerView)
-        inputContainerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            inputContainerView.heightAnchor.constraint(equalToConstant: 50),
-            inputContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            inputContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            inputContainerView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor, constant: -10)
-        ])
+
+
 //        
 //        // InputTextField constraints
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -103,8 +110,9 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     @objc func sendButtonTapped() {
         sendRequest(prompt: textField.text ?? "")
-        let prompt = ChatMessage(sender: "user", prompt: textField.text ?? "nill", isIncoming: true, timestamp: Data())
-        messages.append(prompt)
+        messages.append(ChatMessage(isIncoming: false, response: textField.text ?? ""))
+        textField.text = ""
+        tableView.reloadData()
     }
     
     private func sendRequest(prompt: String) {
@@ -112,7 +120,9 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
             switch result {
             case.success(let answer):
                 DispatchQueue.main.async {
-                    self?.messages.append(answer)
+                    let model = ChatMessage(isIncoming: true, response: answer)
+                    self?.messages.append(model)
+                    self?.tableView.reloadData()
                 }
             case .failure(let error):
                 print(error)
@@ -128,7 +138,6 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         let cell  = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         let model = messages[indexPath.row]
         cell.configure(with: model)
-        tableView.reloadData()
         return cell
     }
     
@@ -150,11 +159,5 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate, UITableVie
         textField.resignFirstResponder()
         return true
     }
-    
-    
-    deinit {
-          NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-          NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-      }
 }
 

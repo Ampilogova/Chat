@@ -8,8 +8,6 @@
 import Foundation
 
 struct ChatMessage: Codable {
-    let sender: String
-    let prompt: String
     let isIncoming: Bool
-    let timestamp: Data
+    let response: String
 }
