@@ -31,7 +31,11 @@ public struct NetworkRequest {
         guard let url = urlComponents?.url else {
             return nil
         }
+        var request = URLRequest(url: url)
+        request.httpMethod = httpMethod
+        request.allHTTPHeaderFields = httpHeaders
+        request.httpBody = data
         
-        return URLRequest(url: url)
+        return request
     }
 }

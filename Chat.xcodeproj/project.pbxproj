@@ -110,9 +110,7 @@
 			children = (
 				CEE2393A2C0FE8E60029D0BE /* AppDelegate.swift */,
 				CEE2393C2C0FE8E60029D0BE /* SceneDelegate.swift */,
-				CEE2393E2C0FE8E60029D0BE /* ChatTableViewController.swift */,
-				CEE239772C18FC6D0029D0BE /* ChatCell.swift */,
-				CEE239752C18FBA00029D0BE /* ChatMessage.swift */,
+				CEE239792C20F37C0029D0BE /* ChatViewController */,
 				CEE239712C10BDF20029D0BE /* PromptService */,
 				CEE2396E2C10BB840029D0BE /* NetworkService */,
 				CEE239432C0FE8E80029D0BE /* Assets.xcassets */,
@@ -154,6 +152,16 @@
 				CEE2396F2C10BDED0029D0BE /* PromptService.swift */,
 			);
 			path = PromptService;
+			sourceTree = "<group>";
+		};
+		CEE239792C20F37C0029D0BE /* ChatViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CEE239752C18FBA00029D0BE /* ChatMessage.swift */,
+				CEE239772C18FC6D0029D0BE /* ChatCell.swift */,
+				CEE2393E2C0FE8E60029D0BE /* ChatTableViewController.swift */,
+			);
+			path = ChatViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

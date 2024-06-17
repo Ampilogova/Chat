@@ -7,8 +7,6 @@
 
 
 
-// UIVisualAffectView
-
 import UIKit
 
 class ChatTableViewController: UIViewController, UITextFieldDelegate {
@@ -70,10 +68,10 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate {
         var snapshot = dataSource.snapshot()
         snapshot.appendItems([message])
         dataSource.apply(snapshot, animatingDifferences: true)
+        scrollToBottom()
     }
     
     func setupUI() {
-        // InputContainerView constraints
         view.addSubview(inputContainerView)
         inputContainerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -83,10 +81,18 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate {
             inputContainerView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
         ])
         
-        // TableView constraints
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        inputContainerView.addSubview(blurEffectView)
+        NSLayoutConstraint.activate([
+            blurEffectView.topAnchor.constraint(equalTo: inputContainerView.topAnchor),
+            blurEffectView.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            blurEffectView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            blurEffectView.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor)
+        ])
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
-//        tableView.dataSource = self
-//        tableView.delegate = self
         tableView.register(ChatCell.self, forCellReuseIdentifier: "ChatCell")
         view.addSubview(tableView)
         tableView.separatorStyle = .none
@@ -95,10 +101,8 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor)
-//            tableView.heightAnchor.constraint(equalToConstant: 600),
         ])
         
-//        // InputTextField constraints
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         inputContainerView.addSubview(textField)
@@ -108,7 +112,6 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate {
             textField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, constant: -16)
         ])
       
-//        // SendButton constraints
         sendButton.translatesAutoresizingMaskIntoConstraints = false
         inputContainerView.addSubview(sendButton)
         NSLayoutConstraint.activate([
@@ -124,32 +127,33 @@ class ChatTableViewController: UIViewController, UITextFieldDelegate {
         sendRequest(prompt: textField.text ?? "")
         addMessage(ChatMessage(isIncoming: false, response: textField.text ?? ""))
         textField.text = ""
+        scrollToBottom()
     }
     
     private func sendRequest(prompt: String) {
-        promptService.sendPrompt(text: prompt) { [weak self] result in
-            switch result {
-            case.success(let answer):
-                DispatchQueue.main.async {
+        Task {
+            do {
+                let answer = try await promptService.sendPrompt(text: prompt)
+                DispatchQueue.main.async { [weak self] in
                     self?.addMessage(answer)
                 }
-            case .failure(let error):
+            } catch {
                 print(error)
             }
         }
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("user started editing")
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("user ended editing")
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+    private func scrollToBottom() {
+        guard !messages.isEmpty else { return }
+
+        let indexPath = IndexPath(row: messages.count - 1, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+    }
 }
+
 
