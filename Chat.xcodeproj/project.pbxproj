@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CEE2393B2C0FE8E60029D0BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE2393A2C0FE8E60029D0BE /* AppDelegate.swift */; };
-		CEE2393D2C0FE8E60029D0BE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE2393C2C0FE8E60029D0BE /* SceneDelegate.swift */; };
-		CEE2393F2C0FE8E60029D0BE /* ChatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE2393E2C0FE8E60029D0BE /* ChatTableViewController.swift */; };
 		CEE239442C0FE8E80029D0BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEE239432C0FE8E80029D0BE /* Assets.xcassets */; };
 		CEE239472C0FE8E80029D0BE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CEE239462C0FE8E80029D0BE /* Base */; };
 		CEE239522C0FE8E80029D0BE /* ChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239512C0FE8E80029D0BE /* ChatTests.swift */; };
@@ -20,7 +17,11 @@
 		CEE239702C10BDED0029D0BE /* PromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE2396F2C10BDED0029D0BE /* PromptService.swift */; };
 		CEE239742C18059D0029D0BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE239452C0FE8E80029D0BE /* LaunchScreen.storyboard */; };
 		CEE239762C18FBA00029D0BE /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239752C18FBA00029D0BE /* ChatMessage.swift */; };
-		CEE239782C18FC6D0029D0BE /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239772C18FC6D0029D0BE /* ChatCell.swift */; };
+		CEE2397B2C2616E70029D0BE /* ChatUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE2397A2C2616E70029D0BE /* ChatUIView.swift */; };
+		CEE2397D2C2621A30029D0BE /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE2397C2C2621A30029D0BE /* ChatCell.swift */; };
+		CEE239BF2C2659E20029D0BE /* UIExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239BE2C2659E20029D0BE /* UIExtentions.swift */; };
+		CEE239C12C2663870029D0BE /* ChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239C02C2663870029D0BE /* ChatApp.swift */; };
+		CEE23A352C27877D0029D0BE /* GenerateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A342C27877D0029D0BE /* GenerateResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,9 +43,6 @@
 
 /* Begin PBXFileReference section */
 		CEE239372C0FE8E60029D0BE /* Chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CEE2393A2C0FE8E60029D0BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CEE2393C2C0FE8E60029D0BE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CEE2393E2C0FE8E60029D0BE /* ChatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewController.swift; sourceTree = "<group>"; };
 		CEE239432C0FE8E80029D0BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CEE239462C0FE8E80029D0BE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CEE239482C0FE8E80029D0BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,7 +55,11 @@
 		CEE2396C2C10B04E0029D0BE /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		CEE2396F2C10BDED0029D0BE /* PromptService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptService.swift; sourceTree = "<group>"; };
 		CEE239752C18FBA00029D0BE /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
-		CEE239772C18FC6D0029D0BE /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		CEE2397A2C2616E70029D0BE /* ChatUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUIView.swift; sourceTree = "<group>"; };
+		CEE2397C2C2621A30029D0BE /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		CEE239BE2C2659E20029D0BE /* UIExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtentions.swift; sourceTree = "<group>"; };
+		CEE239C02C2663870029D0BE /* ChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatApp.swift; sourceTree = "<group>"; };
+		CEE23A342C27877D0029D0BE /* GenerateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,11 +110,11 @@
 		CEE239392C0FE8E60029D0BE /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				CEE2393A2C0FE8E60029D0BE /* AppDelegate.swift */,
-				CEE2393C2C0FE8E60029D0BE /* SceneDelegate.swift */,
+				CEE239C02C2663870029D0BE /* ChatApp.swift */,
 				CEE239792C20F37C0029D0BE /* ChatViewController */,
 				CEE239712C10BDF20029D0BE /* PromptService */,
 				CEE2396E2C10BB840029D0BE /* NetworkService */,
+				CEE239BE2C2659E20029D0BE /* UIExtentions.swift */,
 				CEE239432C0FE8E80029D0BE /* Assets.xcassets */,
 				CEE239452C0FE8E80029D0BE /* LaunchScreen.storyboard */,
 				CEE239482C0FE8E80029D0BE /* Info.plist */,
@@ -150,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				CEE2396F2C10BDED0029D0BE /* PromptService.swift */,
+				CEE23A342C27877D0029D0BE /* GenerateResponse.swift */,
 			);
 			path = PromptService;
 			sourceTree = "<group>";
@@ -157,9 +160,9 @@
 		CEE239792C20F37C0029D0BE /* ChatViewController */ = {
 			isa = PBXGroup;
 			children = (
+				CEE2397A2C2616E70029D0BE /* ChatUIView.swift */,
+				CEE2397C2C2621A30029D0BE /* ChatCell.swift */,
 				CEE239752C18FBA00029D0BE /* ChatMessage.swift */,
-				CEE239772C18FC6D0029D0BE /* ChatCell.swift */,
-				CEE2393E2C0FE8E60029D0BE /* ChatTableViewController.swift */,
 			);
 			path = ChatViewController;
 			sourceTree = "<group>";
@@ -295,14 +298,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEE239BF2C2659E20029D0BE /* UIExtentions.swift in Sources */,
 				CEE239762C18FBA00029D0BE /* ChatMessage.swift in Sources */,
-				CEE239782C18FC6D0029D0BE /* ChatCell.swift in Sources */,
-				CEE2393F2C0FE8E60029D0BE /* ChatTableViewController.swift in Sources */,
-				CEE2393B2C0FE8E60029D0BE /* AppDelegate.swift in Sources */,
+				CEE2397D2C2621A30029D0BE /* ChatCell.swift in Sources */,
+				CEE23A352C27877D0029D0BE /* GenerateResponse.swift in Sources */,
+				CEE2397B2C2616E70029D0BE /* ChatUIView.swift in Sources */,
 				CEE2396B2C10AFE30029D0BE /* NetworkService.swift in Sources */,
-				CEE2393D2C0FE8E60029D0BE /* SceneDelegate.swift in Sources */,
 				CEE239702C10BDED0029D0BE /* PromptService.swift in Sources */,
 				CEE2396D2C10B04E0029D0BE /* NetworkRequest.swift in Sources */,
+				CEE239C12C2663870029D0BE /* ChatApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,7 +484,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chat/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,7 +514,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chat/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

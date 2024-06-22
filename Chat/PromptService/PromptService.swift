@@ -27,14 +27,9 @@ class PromptServiceImpl: PromptService {
         request.httpHeaders["Content-Type"] = "application/json" //gemma:2b
         
         let data = try await networkService.send(request: request)
-        
-        guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-            let jsonDict = jsonObject as? [String: Any],
-              let response  = jsonDict["response"] as? String else {
-            throw NSError(domain: "Error", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response format"])
-        }
-        
-        let message = ChatMessage(isIncoming: true, response: response)
+        let decoder = JSONDecoder()
+        let generateResponse = try decoder.decode(GenerateResponse.self, from: data)
+        let message = ChatMessage(isIncoming: true, text: generateResponse.response)
         return message
     }
 }
