@@ -16,11 +16,17 @@ struct ChatUIView: View {
     @Environment(\.modelContext) var modelContext
     
     var promptService: PromptService
-    var aiModel: ModelName?
     var title: String
+    var chatId: String
     
+    init(promptService: PromptService, title: String, chatId: String) {
+        self.promptService = promptService
+        self.title = title
+        self.chatId = chatId
+        self._messages = Query(filter: #Predicate { $0.chatId == chatId })
+    }
+
     var body: some View {
-        NavigationView {
             VStack {
                 ScrollViewReader { scrollViewProxy in
                     ScrollView {
@@ -31,6 +37,7 @@ struct ChatUIView: View {
                             }
                         }
                     }
+
                     .onChange(of: messages) { _, _ in
                         scrollToBottom(scrollViewProxy: scrollViewProxy)
                     }
@@ -54,10 +61,8 @@ struct ChatUIView: View {
                     }
                 }
                 .padding()
-            }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
         }
+            .navigationTitle(title)
     }
     
     private func scrollToBottom(scrollViewProxy: ScrollViewProxy) {
@@ -71,8 +76,8 @@ struct ChatUIView: View {
     private func sendRequest(prompt: String) {
         Task {
             do {
-                let answer = try await promptService.sendPrompt(text: prompt, aiModel: aiModel?.name ?? "")
-                let message = ChatMessage(isIncoming: true, text: answer.text)
+                let answer = try await promptService.sendPrompt(text: prompt, chatId: chatId)
+                let message = ChatMessage(isIncoming: true, text: answer.text, chatId: chatId)
                 modelContext.insert(message)
             } catch {
                 print("Failed to send request: \(error)")
@@ -84,7 +89,7 @@ struct ChatUIView: View {
         guard !newMessage.isEmpty else {
             return
         }
-        let newChatMessage = ChatMessage(isIncoming: false, text: newMessage)
+        let newChatMessage = ChatMessage(isIncoming: false, text: newMessage, chatId: chatId)
         modelContext.insert(newChatMessage)
         try? modelContext.save()
         sendRequest(prompt: newMessage)

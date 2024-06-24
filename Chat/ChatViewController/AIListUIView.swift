@@ -15,7 +15,7 @@ struct AIListUIView: View {
         NavigationView {
             List(dict.keys.sorted(), id: \.self) { key in
                 if let value = dict[key] {
-                    NavigationLink(destination: ChatUIView(promptService: promptService, aiModel: ModelName(name: key), title: value)) {
+                    NavigationLink(destination: ChatUIView(promptService: promptService, title: value, chatId: key)) {
                         Text(value)
                     }
                 }

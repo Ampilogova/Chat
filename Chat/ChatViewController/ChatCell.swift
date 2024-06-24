@@ -36,7 +36,3 @@ struct ChatCell: View {
         .padding(.horizontal)
     }
 }
-
-//#Preview {
-//    ChatCell(message: ChatMessage(isIncoming: true, text: "text"))
-//}

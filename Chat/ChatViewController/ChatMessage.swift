@@ -13,11 +13,13 @@ class ChatMessage:  ObservableObject, Identifiable {
     let AIModel: ModelName?
     let isIncoming: Bool
     let text: String
+    let chatId: String
     var id = UUID()
     
-    init(isIncoming: Bool, text: String ) {
+    init(isIncoming: Bool, text: String, chatId: String) {
         self.isIncoming = isIncoming
         self.text = text
+        self.chatId = chatId
         self.id = id
     }
 }
