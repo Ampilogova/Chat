@@ -11,12 +11,13 @@ import SwiftData
 
 struct ChatUIView: View {
     
-    @Query var messages: [ChatMessage]
+    @Query private var messages: [ChatMessage]
     @State private var newMessage: String = ""
-    @State private var path = [ChatMessage]()
-    
     @Environment(\.modelContext) var modelContext
+    
     var promptService: PromptService
+    var aiModel: ModelName?
+    var title: String
     
     var body: some View {
         NavigationView {
@@ -54,7 +55,7 @@ struct ChatUIView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Ollama")
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -70,10 +71,9 @@ struct ChatUIView: View {
     private func sendRequest(prompt: String) {
         Task {
             do {
-                let answer = try await promptService.sendPrompt(text: prompt)
+                let answer = try await promptService.sendPrompt(text: prompt, aiModel: aiModel?.name ?? "")
                 let message = ChatMessage(isIncoming: true, text: answer.text)
                 modelContext.insert(message)
-                path.append(message)
             } catch {
                 print("Failed to send request: \(error)")
             }
@@ -86,12 +86,20 @@ struct ChatUIView: View {
         }
         let newChatMessage = ChatMessage(isIncoming: false, text: newMessage)
         modelContext.insert(newChatMessage)
-        path.append(newChatMessage)
+        try? modelContext.save()
         sendRequest(prompt: newMessage)
         newMessage = ""
     }
+    
+    func deleteAllData() {
+        do {
+            try modelContext.delete(model: ChatMessage.self)
+        } catch {
+            print("Failed to delete all schools.")
+        }
+    }
 }
 
-#Preview {
-    ChatUIView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
-}
+//#Preview {
+//    ChatUIView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
+//}

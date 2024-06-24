@@ -21,7 +21,6 @@ struct ChatCell: View {
                     .cornerRadius(10)
                     .frame(alignment: .trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
-  
                 Spacer()
             } else {
                 Spacer()
@@ -38,6 +37,6 @@ struct ChatCell: View {
     }
 }
 
-#Preview {
-    ChatCell(message: ChatMessage(isIncoming: true, text: "text"))
-}
+//#Preview {
+//    ChatCell(message: ChatMessage(isIncoming: true, text: "text"))
+//}

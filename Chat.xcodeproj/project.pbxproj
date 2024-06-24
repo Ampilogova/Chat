@@ -22,6 +22,7 @@
 		CEE239BF2C2659E20029D0BE /* UIExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239BE2C2659E20029D0BE /* UIExtentions.swift */; };
 		CEE239C12C2663870029D0BE /* ChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE239C02C2663870029D0BE /* ChatApp.swift */; };
 		CEE23A352C27877D0029D0BE /* GenerateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A342C27877D0029D0BE /* GenerateResponse.swift */; };
+		CEE23A372C28D1DB0029D0BE /* AIListUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A362C28D1DB0029D0BE /* AIListUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		CEE239BE2C2659E20029D0BE /* UIExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtentions.swift; sourceTree = "<group>"; };
 		CEE239C02C2663870029D0BE /* ChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatApp.swift; sourceTree = "<group>"; };
 		CEE23A342C27877D0029D0BE /* GenerateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateResponse.swift; sourceTree = "<group>"; };
+		CEE23A362C28D1DB0029D0BE /* AIListUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIListUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 		CEE239792C20F37C0029D0BE /* ChatViewController */ = {
 			isa = PBXGroup;
 			children = (
+				CEE23A362C28D1DB0029D0BE /* AIListUIView.swift */,
 				CEE2397A2C2616E70029D0BE /* ChatUIView.swift */,
 				CEE2397C2C2621A30029D0BE /* ChatCell.swift */,
 				CEE239752C18FBA00029D0BE /* ChatMessage.swift */,
@@ -304,6 +307,7 @@
 				CEE23A352C27877D0029D0BE /* GenerateResponse.swift in Sources */,
 				CEE2397B2C2616E70029D0BE /* ChatUIView.swift in Sources */,
 				CEE2396B2C10AFE30029D0BE /* NetworkService.swift in Sources */,
+				CEE23A372C28D1DB0029D0BE /* AIListUIView.swift in Sources */,
 				CEE239702C10BDED0029D0BE /* PromptService.swift in Sources */,
 				CEE2396D2C10B04E0029D0BE /* NetworkRequest.swift in Sources */,
 				CEE239C12C2663870029D0BE /* ChatApp.swift in Sources */,

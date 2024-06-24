@@ -8,7 +8,7 @@
 import Foundation
 
 protocol PromptService {
-    func sendPrompt(text: String) async throws -> ChatMessage
+    func sendPrompt(text: String, aiModel: String) async throws -> ChatMessage
 }
 
 class PromptServiceImpl: PromptService {
@@ -20,11 +20,11 @@ class PromptServiceImpl: PromptService {
         self.networkService = networkService
     }
     
-    func sendPrompt(text: String) async throws -> ChatMessage {
+    func sendPrompt(text: String, aiModel: String) async throws -> ChatMessage {
         var request = NetworkRequest(url: stringUrl)
         request.httpMethod = "POST"
-        request.postParameters = ["model": "tinyllama", "prompt" : text, "stream": false]
-        request.httpHeaders["Content-Type"] = "application/json" //gemma:2b
+        request.postParameters = ["model": aiModel, "prompt" : text, "stream": false]
+        request.httpHeaders["Content-Type"] = "application/json" //gemma:2b, tinyllama
         
         let data = try await networkService.send(request: request)
         let decoder = JSONDecoder()
