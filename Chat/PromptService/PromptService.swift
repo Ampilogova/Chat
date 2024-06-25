@@ -24,7 +24,7 @@ class PromptServiceImpl: PromptService {
         var request = NetworkRequest(url: stringUrl)
         request.httpMethod = "POST"
         request.postParameters = ["model": chatId, "prompt" : text, "stream": false]
-        request.httpHeaders["Content-Type"] = "application/json" //gemma:2b, tinyllama
+        request.httpHeaders["Content-Type"] = "application/json"
         
         let data = try await networkService.send(request: request)
         let decoder = JSONDecoder()

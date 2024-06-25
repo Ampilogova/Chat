@@ -42,7 +42,9 @@ struct ChatUIView: View {
                         scrollToBottom(scrollViewProxy: scrollViewProxy)
                     }
                     .onAppear {
-                         scrollToBottom(scrollViewProxy: scrollViewProxy)
+                         if let lastMessage = messages.last {
+                             scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                         }
                      }
                 }
                 HStack {
@@ -62,7 +64,7 @@ struct ChatUIView: View {
                 }
                 .padding()
         }
-            .navigationTitle(title)
+            .navigationBarTitle(title, displayMode: .inline)
     }
     
     private func scrollToBottom(scrollViewProxy: ScrollViewProxy) {
@@ -104,7 +106,3 @@ struct ChatUIView: View {
         }
     }
 }
-
-//#Preview {
-//    ChatUIView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
-//}

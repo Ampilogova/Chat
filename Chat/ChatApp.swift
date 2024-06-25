@@ -13,12 +13,7 @@ struct ChatApp: App {
     var body: some Scene {
         WindowGroup {
             AIListUIView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
-//            ChatUIView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
         }
         .modelContainer(for: ChatMessage.self)
     }
 }
-
-//#Preview {
-//    ChatUI() as! any View
-//}
