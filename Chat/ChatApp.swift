@@ -12,7 +12,7 @@ import SwiftData
 struct ChatApp: App {
     var body: some Scene {
         WindowGroup {
-            AIListUIView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
+            AIModelsListView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
         }
         .modelContainer(for: ChatMessage.self)
     }

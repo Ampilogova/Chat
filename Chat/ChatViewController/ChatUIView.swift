@@ -12,7 +12,7 @@ import SwiftData
 struct ChatUIView: View {
     
     @Query private var messages: [ChatMessage]
-    @State private var newMessage: String = ""
+    @State private var newMessageText: String = ""
     @Environment(\.modelContext) var modelContext
     
     var promptService: PromptService
@@ -25,46 +25,55 @@ struct ChatUIView: View {
         self.chatId = chatId
         self._messages = Query(filter: #Predicate { $0.chatId == chatId })
     }
+    
+    var messageList: some View {
+        VStack {
+            ForEach(messages) { item in
+                ChatCell(message: item)
+                    .id(item.id)
+            }
+        }
+    }
+    
+    @ViewBuilder var messageInputView: some View {
+        HStack {
+            TextField("Enter message", text: $newMessageText, axis: .vertical)
+                .textFieldStyle(.roundedBorder)
+                .lineLimit(5)
+            
+            Button(action: {
+                sendMessage()
+            }) {
+                Text("Send")
+                    .foregroundColor(.white)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .background(newMessageText.isEmpty ? Color.gray : Color.blue)
+                    .cornerRadius(8)
+            }
+            .disabled(newMessageText.isEmpty)
+        }
+        .padding()
+    }
 
     var body: some View {
-            VStack {
-                ScrollViewReader { scrollViewProxy in
-                    ScrollView {
-                        VStack {
-                            ForEach(messages) { item in
-                                ChatCell(message: item)
-                                    .id(item.id)
-                            }
-                        }
-                    }
-
-                    .onChange(of: messages) { _, _ in
-                        scrollToBottom(scrollViewProxy: scrollViewProxy)
-                    }
-                    .onAppear {
-                         if let lastMessage = messages.last {
-                             scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
-                         }
-                     }
+        VStack {
+            ScrollViewReader { scrollViewProxy in
+                ScrollView {
+                    messageList
                 }
-                HStack {
-                    TextField("Enter message", text: $newMessage, axis: .vertical)
-                        .textFieldStyle(.roundedBorder)
-                        .lineLimit(5)
-                    Button(action: {
-                        sendMessage()
-                    }) {
-                        Text("Send")
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
-                            .background(Color.blue)
-                            .cornerRadius(8)
+                .onChange(of: messages) { _, _ in
+                    scrollToBottom(scrollViewProxy: scrollViewProxy)
+                }
+                .onAppear {
+                    if let lastMessage = messages.last {
+                        scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
                     }
                 }
-                .padding()
+            }
+            messageInputView
         }
-            .navigationBarTitle(title, displayMode: .inline)
+        .navigationBarTitle(title, displayMode: .inline)
     }
     
     private func scrollToBottom(scrollViewProxy: ScrollViewProxy) {
@@ -78,7 +87,7 @@ struct ChatUIView: View {
     private func sendRequest(prompt: String) {
         Task {
             do {
-                let answer = try await promptService.sendPrompt(text: prompt, chatId: chatId)
+                let answer = try await promptService.sendPrompt(text: prompt, modelName: chatId)
                 let message = ChatMessage(isIncoming: true, text: answer.text, chatId: chatId)
                 modelContext.insert(message)
             } catch {
@@ -88,14 +97,10 @@ struct ChatUIView: View {
     }
     
     private func sendMessage() {
-        guard !newMessage.isEmpty else {
-            return
-        }
-        let newChatMessage = ChatMessage(isIncoming: false, text: newMessage, chatId: chatId)
+        let newChatMessage = ChatMessage(isIncoming: false, text: newMessageText, chatId: chatId)
         modelContext.insert(newChatMessage)
-        try? modelContext.save()
-        sendRequest(prompt: newMessage)
-        newMessage = ""
+        sendRequest(prompt: newMessageText)
+        newMessageText = ""
     }
     
     func deleteAllData() {

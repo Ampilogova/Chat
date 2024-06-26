@@ -19,7 +19,6 @@ struct ChatCell: View {
                     .background(Color.gray.opacity(0.3))
                     .foregroundColor(.black)
                     .cornerRadius(10)
-                    .frame(alignment: .trailing)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
             } else {
@@ -29,7 +28,6 @@ struct ChatCell: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-                    .frame(alignment: .leading)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
