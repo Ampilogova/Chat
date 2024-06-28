@@ -24,6 +24,7 @@
 		CEE23A352C27877D0029D0BE /* GenerateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A342C27877D0029D0BE /* GenerateResponse.swift */; };
 		CEE23A372C28D1DB0029D0BE /* AIModelsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A362C28D1DB0029D0BE /* AIModelsListView.swift */; };
 		CEE23A3B2C2CA88F0029D0BE /* AIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A3A2C2CA88F0029D0BE /* AIModel.swift */; };
+		CEE23A3D2C2F5D2B0029D0BE /* CreateChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE23A3C2C2F5D2B0029D0BE /* CreateChat.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		CEE23A342C27877D0029D0BE /* GenerateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateResponse.swift; sourceTree = "<group>"; };
 		CEE23A362C28D1DB0029D0BE /* AIModelsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelsListView.swift; sourceTree = "<group>"; };
 		CEE23A3A2C2CA88F0029D0BE /* AIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModel.swift; sourceTree = "<group>"; };
+		CEE23A3C2C2F5D2B0029D0BE /* CreateChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChat.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,8 @@
 			isa = PBXGroup;
 			children = (
 				CEE239C02C2663870029D0BE /* ChatApp.swift */,
+				CEE23A3F2C2F5D760029D0BE /* AiModelListView */,
+				CEE23A3E2C2F5D4D0029D0BE /* CreateChatView */,
 				CEE239792C20F37C0029D0BE /* ChatViewController */,
 				CEE239712C10BDF20029D0BE /* PromptService */,
 				CEE2396E2C10BB840029D0BE /* NetworkService */,
@@ -164,13 +168,28 @@
 		CEE239792C20F37C0029D0BE /* ChatViewController */ = {
 			isa = PBXGroup;
 			children = (
-				CEE23A362C28D1DB0029D0BE /* AIModelsListView.swift */,
-				CEE23A3A2C2CA88F0029D0BE /* AIModel.swift */,
 				CEE2397A2C2616E70029D0BE /* ChatUIView.swift */,
 				CEE2397C2C2621A30029D0BE /* ChatCell.swift */,
 				CEE239752C18FBA00029D0BE /* ChatMessage.swift */,
 			);
 			path = ChatViewController;
+			sourceTree = "<group>";
+		};
+		CEE23A3E2C2F5D4D0029D0BE /* CreateChatView */ = {
+			isa = PBXGroup;
+			children = (
+				CEE23A3C2C2F5D2B0029D0BE /* CreateChat.swift */,
+			);
+			path = CreateChatView;
+			sourceTree = "<group>";
+		};
+		CEE23A3F2C2F5D760029D0BE /* AiModelListView */ = {
+			isa = PBXGroup;
+			children = (
+				CEE23A362C28D1DB0029D0BE /* AIModelsListView.swift */,
+				CEE23A3A2C2CA88F0029D0BE /* AIModel.swift */,
+			);
+			path = AiModelListView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,6 +326,7 @@
 				CEE239BF2C2659E20029D0BE /* UIExtentions.swift in Sources */,
 				CEE239762C18FBA00029D0BE /* ChatMessage.swift in Sources */,
 				CEE2397D2C2621A30029D0BE /* ChatCell.swift in Sources */,
+				CEE23A3D2C2F5D2B0029D0BE /* CreateChat.swift in Sources */,
 				CEE23A3B2C2CA88F0029D0BE /* AIModel.swift in Sources */,
 				CEE23A352C27877D0029D0BE /* GenerateResponse.swift in Sources */,
 				CEE2397B2C2616E70029D0BE /* ChatUIView.swift in Sources */,

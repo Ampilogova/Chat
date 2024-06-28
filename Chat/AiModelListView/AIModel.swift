@@ -7,8 +7,7 @@
 
 import UIKit
 
-enum AIModel: CaseIterable {
-    
+enum AIModel: CaseIterable {    
     case gemma
     case tinyllama
     
