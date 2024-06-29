@@ -9,6 +9,7 @@ import SwiftUI
     
     struct AIModelsListView: View {
         var promptService: PromptService
+        var chats = [AIModel]()
         @State private var showModal = false
         
         var body: some View {
@@ -26,9 +27,8 @@ import SwiftUI
                 .navigationTitle("Chat")
                 .navigationBarTitleDisplayMode(.automatic)
             }
-            .sheet(isPresented: $showModal) {
-                CreateChat()
-                    .presentationDetents([.height(300)])
-            }
+            .popover(isPresented: $showModal, content: {
+                CreateChat(promptService: promptService)
+            })
         }
     }
