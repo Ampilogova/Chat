@@ -16,9 +16,6 @@ struct ChatUIView: View {
     @Environment(\.modelContext) var modelContext
     
     var promptService: PromptService
-//    var title: String
-//    var chatId: UUID
-//    var model: String
     var chat: Chat
     
     init(promptService: PromptService, chat: Chat) {
@@ -35,7 +32,6 @@ struct ChatUIView: View {
                     .id(item.id)
             }
         }
-    // loading
     }
     
     @ViewBuilder var messageInputView: some View {
@@ -58,7 +54,7 @@ struct ChatUIView: View {
         }
         .padding()
     }
-
+    
     var body: some View {
         VStack {
             ScrollViewReader { scrollViewProxy in
@@ -79,13 +75,14 @@ struct ChatUIView: View {
         .navigationBarTitle("title", displayMode: .inline)
     }
     
+    
     private func scrollToBottom(scrollViewProxy: ScrollViewProxy) {
-           if let lastMessage = messages.last {
-               withAnimation {
-                   scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
-               }
-           }
-       }
+        if let lastMessage = messages.last {
+            withAnimation {
+                scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
+            }
+        }
+    }
     
     private func sendRequest(prompt: String) {
         Task {

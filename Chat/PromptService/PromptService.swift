@@ -29,9 +29,6 @@ class PromptServiceImpl: PromptService {
         let data = try await networkService.send(request: request)
         let decoder = JSONDecoder()
         let generateResponse = try decoder.decode(GenerateResponse.self, from: data)
-        //string
-        
-//        let message = ChatMessage(isIncoming: true, text: generateResponse.response, aiModel: modelName, chatId: chatId, chat: <#Chat#>)
         return generateResponse.response
     }
 }

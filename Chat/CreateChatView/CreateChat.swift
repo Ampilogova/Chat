@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CreateChat: View {
-    @Environment(\.dismiss) var dismiss
+    
     @State private var selectedModel: AIModel?
     @State private var path = NavigationPath()
     @Environment(\.modelContext) var modelContext
@@ -43,8 +43,8 @@ struct CreateChat: View {
     }
     
     private func createNewChat() {
-        if let modelName = selectedModel?.modelName {
-            let chat = Chat(aimodel: modelName)
+        if let modelName = selectedModel {
+            let chat = Chat(aimodel: modelName.modelName, title: modelName.title)
             modelContext.insert(chat)
             path.append(chat)
         }

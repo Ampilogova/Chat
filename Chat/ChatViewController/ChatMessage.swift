@@ -12,11 +12,14 @@ import SwiftData
 class Chat: Identifiable {
     let id = UUID()
     let AIModel: String
+    let title: String
+    
     @Relationship(deleteRule: .cascade, inverse: \ChatMessage.chat)
     var messages = [ChatMessage]()
     
-    init(aimodel: String) {
+    init(aimodel: String, title: String) {
         self.AIModel = aimodel
+        self.title = title
     }
 }
 
@@ -32,14 +35,3 @@ class ChatMessage:  ObservableObject, Identifiable {
         self.chat = chat
     }
 }
-//
-//@Model
-//final class ModelName {
-//    @Attribute(.unique) var name: String
-//    @Relationship(deleteRule: .cascade, inverse: \ChatMessage.AIModel)
-//    var messages = [ChatMessage]()
-//    
-//    init(name: String) {
-//        self.name = name
-//    }
-//}
