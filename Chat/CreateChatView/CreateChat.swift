@@ -9,8 +9,9 @@ import SwiftUI
 
 struct CreateChat: View {
     @Environment(\.dismiss) var dismiss
-    @State private var selectedModel: AIModel? = nil
+    @State private var selectedModel: AIModel?
     @State private var path = NavigationPath()
+    @Environment(\.modelContext) var modelContext
     var promptService: PromptService
     
     var body: some View {
@@ -35,18 +36,17 @@ struct CreateChat: View {
             }) {
                 Text("Create")
             })
-            .navigationDestination(for: AIModel.self) { model in
-                ChatUIView(promptService: promptService, title: model.title, chatId: model.modelName)
+            .navigationDestination(for: Chat.self) { chat in
+                    ChatUIView(promptService: promptService, chat: chat)
             }
         }
     }
     
     private func createNewChat() {
-        if let model = selectedModel {
-            path.append(model)
-        } else {
-            // Handle the case when no model is selected, e.g., show an alert
-            print("No model selected")
+        if let modelName = selectedModel?.modelName {
+            let chat = Chat(aimodel: modelName)
+            modelContext.insert(chat)
+            path.append(chat)
         }
     }
 }

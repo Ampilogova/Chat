@@ -8,7 +8,7 @@
 import Foundation
 
 protocol PromptService {
-    func sendPrompt(text: String, modelName: String) async throws -> ChatMessage
+    func sendPrompt(text: String, modelName: String) async throws -> String
 }
 
 class PromptServiceImpl: PromptService {
@@ -20,7 +20,7 @@ class PromptServiceImpl: PromptService {
         self.networkService = networkService
     }
     
-    func sendPrompt(text: String, modelName: String) async throws -> ChatMessage {
+    func sendPrompt(text: String, modelName: String) async throws -> String {
         var request = NetworkRequest(url: stringUrl)
         request.httpMethod = "POST"
         request.postParameters = ["model": modelName, "prompt" : text, "stream": false]
@@ -29,7 +29,9 @@ class PromptServiceImpl: PromptService {
         let data = try await networkService.send(request: request)
         let decoder = JSONDecoder()
         let generateResponse = try decoder.decode(GenerateResponse.self, from: data)
-        let message = ChatMessage(isIncoming: true, text: generateResponse.response, chatId: modelName)
-        return message
+        //string
+        
+//        let message = ChatMessage(isIncoming: true, text: generateResponse.response, aiModel: modelName, chatId: chatId, chat: <#Chat#>)
+        return generateResponse.response
     }
 }

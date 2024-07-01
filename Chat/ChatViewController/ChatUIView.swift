@@ -16,14 +16,16 @@ struct ChatUIView: View {
     @Environment(\.modelContext) var modelContext
     
     var promptService: PromptService
-    var title: String
-    var chatId: String
+//    var title: String
+//    var chatId: UUID
+//    var model: String
+    var chat: Chat
     
-    init(promptService: PromptService, title: String, chatId: String) {
+    init(promptService: PromptService, chat: Chat) {
         self.promptService = promptService
-        self.title = title
-        self.chatId = chatId
-        self._messages = Query(filter: #Predicate { $0.chatId == chatId })
+        self.chat = chat
+        let chatId = chat.persistentModelID
+        self._messages = Query(filter: #Predicate { $0.chat.persistentModelID == chatId })
     }
     
     var messageList: some View {
@@ -33,6 +35,7 @@ struct ChatUIView: View {
                     .id(item.id)
             }
         }
+    // loading
     }
     
     @ViewBuilder var messageInputView: some View {
@@ -73,7 +76,7 @@ struct ChatUIView: View {
             }
             messageInputView
         }
-        .navigationBarTitle(title, displayMode: .inline)
+        .navigationBarTitle("title", displayMode: .inline)
     }
     
     private func scrollToBottom(scrollViewProxy: ScrollViewProxy) {
@@ -87,8 +90,8 @@ struct ChatUIView: View {
     private func sendRequest(prompt: String) {
         Task {
             do {
-                let answer = try await promptService.sendPrompt(text: prompt, modelName: chatId)
-                let message = ChatMessage(isIncoming: true, text: answer.text, chatId: chatId)
+                let answer = try await promptService.sendPrompt(text: prompt, modelName: chat.AIModel)
+                let message = ChatMessage(isIncoming: true, text: answer, chat: chat)
                 modelContext.insert(message)
             } catch {
                 print("Failed to send request: \(error)")
@@ -97,7 +100,7 @@ struct ChatUIView: View {
     }
     
     private func sendMessage() {
-        let newChatMessage = ChatMessage(isIncoming: false, text: newMessageText, chatId: chatId)
+        let newChatMessage = ChatMessage(isIncoming: false, text: newMessageText, chat: chat)
         modelContext.insert(newChatMessage)
         sendRequest(prompt: newMessageText)
         newMessageText = ""

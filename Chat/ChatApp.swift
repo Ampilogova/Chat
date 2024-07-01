@@ -14,6 +14,21 @@ struct ChatApp: App {
         WindowGroup {
             AIModelsListView(promptService: PromptServiceImpl(networkService: NetworkServiceImpl()))
         }
-        .modelContainer(for: ChatMessage.self)
+        .modelContainer(ModelContainer.shared)
     }
+}
+
+extension ModelContainer {
+    static let shared: ModelContainer = {
+        let schema = Schema([
+            ChatMessage.self,
+            Chat.self,
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
 }

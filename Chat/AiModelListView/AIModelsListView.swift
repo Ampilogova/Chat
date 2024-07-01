@@ -6,29 +6,38 @@
 //
 
 import SwiftUI
+import SwiftData
+
+struct AIModelsListView: View {
+    var promptService: PromptService
+    //    var chats =  [AIModel]()
+    @Query private var chats: [Chat]
+    @State private var showModal = false
+    @Environment(\.modelContext) var modelContext
     
-    struct AIModelsListView: View {
-        var promptService: PromptService
-        var chats = [AIModel]()
-        @State private var showModal = false
-        
-        var body: some View {
-            NavigationView {
-                List(AIModel.allCases, id: \.self) { model in
-                    NavigationLink(destination: ChatUIView(promptService: promptService, title: model.title, chatId: model.modelName)) {
-                        Text(model.title)
-                    }
-                    .navigationBarItems(trailing: Button(action: {
-                        showModal = true
-                    }, label: {
-                        Image(systemName: "plus")
-                    }))
+    var body: some View {
+        NavigationView {
+            List(chats) { chat in
+                NavigationLink(destination: ChatUIView(promptService: promptService, chat: chat)) {
+                    Text(chat.id.uuidString)
                 }
+                
                 .navigationTitle("Chat")
                 .navigationBarTitleDisplayMode(.automatic)
+                
             }
+            .navigationBarItems(trailing: Button(action: {
+                                    showModal = true
+//                let chat = Chat(aimodel: AIModel.tinyllama.modelName)
+//                modelContext.insert(chat)
+            }, label: {
+                Image(systemName: "plus")
+            }))
+            
             .popover(isPresented: $showModal, content: {
                 CreateChat(promptService: promptService)
             })
         }
+        
     }
+}

@@ -8,29 +8,38 @@
 import Foundation
 import SwiftData
 
-@Model 
-class ChatMessage:  ObservableObject, Identifiable {
-    let AIModel: ModelName?
-    let isIncoming: Bool
-    let text: String
-    let chatId: String
-    var id = UUID()
+@Model
+class Chat: Identifiable {
+    let id = UUID()
+    let AIModel: String
+    @Relationship(deleteRule: .cascade, inverse: \ChatMessage.chat)
+    var messages = [ChatMessage]()
     
-    init(isIncoming: Bool, text: String, chatId: String) {
-        self.isIncoming = isIncoming
-        self.text = text
-        self.chatId = chatId
-        self.id = id
+    init(aimodel: String) {
+        self.AIModel = aimodel
     }
 }
 
 @Model
-final class ModelName {
-    @Attribute(.unique) var name: String
-    @Relationship(deleteRule: .cascade, inverse: \ChatMessage.AIModel)
-    var messages = [ChatMessage]()
+class ChatMessage:  ObservableObject, Identifiable {
+    let isIncoming: Bool
+    let text: String
+    let chat: Chat
     
-    init(name: String) {
-        self.name = name
+    init(isIncoming: Bool, text: String, chat: Chat) {
+        self.isIncoming = isIncoming
+        self.text = text
+        self.chat = chat
     }
 }
+//
+//@Model
+//final class ModelName {
+//    @Attribute(.unique) var name: String
+//    @Relationship(deleteRule: .cascade, inverse: \ChatMessage.AIModel)
+//    var messages = [ChatMessage]()
+//    
+//    init(name: String) {
+//        self.name = name
+//    }
+//}
