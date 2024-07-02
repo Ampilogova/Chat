@@ -16,27 +16,36 @@ struct AIModelsListView: View {
     
     var body: some View {
         NavigationView {
-            List(chats) { chat in
-                NavigationLink(destination: ChatUIView(promptService: promptService, chat: chat)) {
-                    Text(chat.title)
+            List {
+                ForEach(chats) { chat in
+                    NavigationLink(destination: ChatUIView(promptService: promptService, chat: chat)) {
+                        Text(chat.title)
+                    }
                 }
-                
-                .navigationTitle("Chat")
-                .navigationBarTitleDisplayMode(.automatic)
-                
+                .onDelete(perform: delete)
             }
+            .navigationTitle("Chat")
+            .navigationBarTitleDisplayMode(.automatic)
             .navigationBarItems(trailing: Button(action: {
                 showModal = true
-//                let chat = Chat(aimodel: AIModel.tinyllama.modelName, title: AIModel.tinyllama.title)
-//                modelContext.insert(chat)
             }, label: {
                 Image(systemName: "plus")
             }))
-            
             .popover(isPresented: $showModal, content: {
                 CreateChat(promptService: promptService)
             })
         }
-        
+    }
+    
+    private func delete(at offsets: IndexSet) {
+        for index in offsets {
+            let chat = chats[index]
+            modelContext.delete(chat)
+        }
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error deleting chat: \(error)")
+        }
     }
 }
