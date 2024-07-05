@@ -72,7 +72,7 @@ struct ChatUIView: View {
             }
             messageInputView
         }
-        .navigationBarTitle("title", displayMode: .inline)
+        .navigationBarTitle(chat.title, displayMode: .inline)
     }
     
     
@@ -97,10 +97,21 @@ struct ChatUIView: View {
     }
     
     private func sendMessage() {
+        let prevMessaages = makeAISmart()
         let newChatMessage = ChatMessage(isIncoming: false, text: newMessageText, chat: chat)
         modelContext.insert(newChatMessage)
-        sendRequest(prompt: newMessageText)
+        sendRequest(prompt: prevMessaages + newMessageText)
         newMessageText = ""
+    }
+    
+    private func makeAISmart() -> String {
+        var request = ""
+        for message in messages {
+            if !message.isIncoming {
+                request += message.text
+            }
+        }
+        return request
     }
     
     func deleteAllData() {
