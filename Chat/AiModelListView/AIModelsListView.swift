@@ -19,7 +19,10 @@ struct AIModelsListView: View {
             List {
                 ForEach(chats) { chat in
                     NavigationLink(destination: ChatUIView(promptService: promptService, chat: chat)) {
-                        Text(chat.title)
+                        VStack(alignment: .leading){
+                            Text(chat.title)
+                            Text(chat.subtitle ?? "").foregroundStyle(.secondary)
+                        }
                     }
                 }
                 .onDelete(perform: delete)

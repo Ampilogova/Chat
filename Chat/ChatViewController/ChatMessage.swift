@@ -13,6 +13,7 @@ class Chat: Identifiable {
     let id = UUID()
     let AIModel: String
     let title: String
+    var subtitle: String?
     
     @Relationship(deleteRule: .cascade, inverse: \ChatMessage.chat)
     var messages = [ChatMessage]()

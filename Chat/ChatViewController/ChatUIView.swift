@@ -62,9 +62,11 @@ struct ChatUIView: View {
                     messageList
                 }
                 .onChange(of: messages) { _, _ in
+                    createSubtitle()
                     scrollToBottom(scrollViewProxy: scrollViewProxy)
                 }
                 .onAppear {
+                    createSubtitle()
                     if let lastMessage = messages.last {
                         scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
                     }
@@ -112,6 +114,11 @@ struct ChatUIView: View {
             }
         }
         return request
+    }
+    private func createSubtitle() {
+        if let subtitle = messages.first?.text {
+            chat.subtitle = subtitle
+        }
     }
     
     func deleteAllData() {
