@@ -66,7 +66,6 @@ struct ChatUIView: View {
                     scrollToBottom(scrollViewProxy: scrollViewProxy)
                 }
                 .onAppear {
-                    createSubtitle()
                     if let lastMessage = messages.last {
                         scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
                     }
